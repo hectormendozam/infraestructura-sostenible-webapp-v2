@@ -1,0 +1,97 @@
+name: CI - PHP Full Stack Testing
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'backend/**'
+      - 'src/**'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'backend/**'
+      - 'src/**'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: infraestructura_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+      working-directory: ./backend
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: backend/vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: ${{ runner.os }}-php-
+
+    - name: Install PHP dependencies
+      working-directory: ./backend
+      run: composer install --no-progress --no-suggest
+
+    - name: Run PHPUnit tests
+      working-directory: ./backend
+      run: |
+        if [ -f vendor/bin/phpunit ]; then
+          vendor/bin/phpunit --log-junit phpunit-results.xml
+        else
+          echo "PHPUnit not installed, skipping."
+        fi
+
+    - name: Run Codeception tests
+      working-directory: ./backend
+      run: |
+        if [ -f vendor/bin/codecept ]; then
+          vendor/bin/codecept run --xml
+        else
+          echo "Codeception not installed, skipping."
+        fi
+
+    - name: Set up Node.js for Cypress
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Cypress dependencies
+      run: npm install
+
+    - name: Run Cypress tests
+      run: npx cypress run
+
+    - name: Generate Allure Report
+      run: |
+        npm install -g allure-commandline --save-dev
+        allure generate allure-results --clean -o allure-report
+
+    - name: Upload Allure report
+      uses: actions/upload-artifact@v3
+      with:
+        name: allure-report
+        path: allure-report
+
+    - name: Medir tiempo de respuesta
+      run: |
+        tiempo=$(curl -o /dev/null -s -w "%{time_total}\n" http://localhost)
+        echo "⏱ Tiempo de respuesta del index: $tiempo segundos"
