@@ -1,1 +1,48 @@
+# ========================
+# PHP & Composer
+# ========================
 /vendor/
+composer.lock
+
+# ========================
+# PHPUnit / Codeception
+# ========================
+.phpunit.result.cache
+/tests/_output/
+codeception.yml
+
+# ========================
+# Cypress
+# ========================
+/cypress/screenshots/
+/cypress/videos/
+/allure-results/
+/allure-report/
+
+# ========================
+# Node.js
+# ========================
+/node_modules/
+/package-lock.json
+
+# ========================
+# IDEs & editores
+# ========================
+.vscode/
+.idea/
+/*.sublime-*
+*.code-workspace
+
+# ========================
+# Archivos del sistema
+# ========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ========================
+# Entornos
+# ========================
+.env
+.env.local
+.env.test
