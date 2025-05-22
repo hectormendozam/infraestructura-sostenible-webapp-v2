@@ -5,6 +5,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
+
 include 'config.php'; // Archivo con la conexión a la base de datos
 
 // Verificar si el usuario está autenticado
@@ -15,18 +16,23 @@ if (!isset($_SESSION['user_id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validar que se hayan enviado los campos requeridos
-    $requiredFields = ['proyecto_id', 'name', 'description'];
-    foreach ($requiredFields as $field) {
-        if (empty($_POST[$field])) {
-            die("Error: Por favor, completa todos los campos obligatorios.");
-        }
-    }
-
     // Obtener los valores del formulario
-    $id = $_POST['proyecto_id'];
-    $nombre = $_POST['name'];
-    $descripcion = $_POST['description'];
-    $usuario_id = $_SESSION['user_id']; // Usar el ID del usuario autenticado
+$id = $_POST['proyecto_id'] ?? '';
+$nombre = trim($_POST['name'] ?? '');
+$descripcion = trim($_POST['description'] ?? '');
+$usuario_id = $_SESSION['user_id'];
+
+// Validación del nombre
+if ($nombre === '') {
+    $_SESSION['form_error'] = '⚠️ El nombre del proyecto no puede estar vacío.';
+    $_SESSION['form_data'] = [
+        'nombre' => '',
+        'descripcion' => $descripcion,
+        'proyecto_id' => $id
+    ];
+    header("Location: edit_projects.php");
+    exit();
+}
 
     // Actualizar el proyecto en la base de datos
     $sql = "UPDATE proyectos 

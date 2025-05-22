@@ -2,6 +2,13 @@
 // Iniciar la sesión
 session_start();
 
+$alertType = $_SESSION['alert_type'] ?? null;
+$alertMessage = $_SESSION['alert_message'] ?? null;
+
+// Limpiar la sesión para que el mensaje solo aparezca una vez
+unset($_SESSION['alert_type'], $_SESSION['alert_message']);
+
+
 // Verificar si el usuario está autenticado
 if (!isset($_SESSION['user_id'])) {
     // Si no está autenticado, redirigir al login
@@ -94,9 +101,11 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
 
 
-                
                 <!-- TABLA  -->
                 <div class="col-md-8">
+                    <!-- Contenedor para el mensaje -->
+                        <div id="mensaje-proyecto" class="mt-3"></div>
+
                     <div class="card my-4 d-none" id="project-result">
                         <div class="card-body">
                             <!-- RESULTADO -->
@@ -114,15 +123,18 @@ if (!isset($_SESSION['user_id'])) {
                         </thead>
                         <tbody id="projects"></tbody>
                     </table>
+                    
                     <button class="btn btn-primary w-100 mt-3" id="botonEditar">
                         <a href="edit_projects.php" class="nav-link text-white">Editar Proyectos</a>
-                    </button>
+                    </button><break><break>
+
                 </div>
                 
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>

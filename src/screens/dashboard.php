@@ -70,14 +70,17 @@ if (!isset($_SESSION['user_id'])) {
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <h5 class="card-title">Progreso de Objetivos</h5>
+                            <div id="loadingProgreso" class="text-center text-muted">Cargando gráfico de progreso...</div>
                             <canvas id="progresoChart"></canvas>
                         </div>
                     </div>
+                    
                 </div>
                 <div class="col-md-6">
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <h5 class="card-title">Comparación de Proyectos</h5>
+                            <div id="loadingProgreso" class="text-center text-muted">Cargando gráfico de progreso...</div>
                             <canvas id="comparacionChart"></canvas>
                         </div>
                     </div>
@@ -89,6 +92,7 @@ if (!isset($_SESSION['user_id'])) {
         <div class="card shadow-sm">
             <div class="card-body">
                 <h5 class="card-title">Tendencias Históricas</h5>
+                <div id="loadingProgreso" class="text-center text-muted">Cargando gráfico de progreso...</div>
                 <canvas id="tendenciasChart"></canvas>
             </div>
         </div>
@@ -117,7 +121,11 @@ if (!isset($_SESSION['user_id'])) {
                                 </tbody>
                             </table>
                         </div>
+                        
                     </div>
+                    <button class="btn btn-outline-secondary mt-2" onclick="location.reload()">
+                        🔄 Actualizar gráficos
+                    </button>
                 </div>
             </div>
         </div>
@@ -138,6 +146,9 @@ if (!isset($_SESSION['user_id'])) {
             }
 
             fetchProgresoObjetivos().then(data => {
+                document.getElementById("loadingProgreso").style.display = "none";
+                document.getElementById("progresoChart").classList.remove("d-none");
+
                 const labels = data.map(d => d.objetivo);
                 const valores = data.map(d => d.valor);
 
@@ -165,10 +176,54 @@ if (!isset($_SESSION['user_id'])) {
                     },
                     options: {
                         responsive: true,
+                        plugins: {
+                            legend: {
+                            display: true,
+                            position: 'top'
+                            },
+                            tooltip: {
+                            enabled: true,
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) label += ': ';
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toLocaleString();
+                                }
+                                return label;
+                                }
+                            }
+                            }
+                        },
+                        interaction: {
+                            mode: 'nearest',
+                            axis: 'x',
+                            intersect: false
+                        },
                         scales: {
-                            y: { beginAtZero: true }
+                            x: {
+                            title: {
+                                display: true,
+                                text: 'Categoría'
+                            },
+                            ticks: {
+                                autoSkip: true,
+                                maxRotation: 45,
+                                minRotation: 0
+                            }
+                            },
+                            y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Valores'
+                            }
+                            }
                         }
-                    }
+                        }
+
                 });
             }).catch(err => console.error('Error al cargar el progreso de objetivos:', err));
         });
@@ -183,6 +238,9 @@ if (!isset($_SESSION['user_id'])) {
 
             fetchComparacionProyectos()
             .then(data => {
+                document.getElementById("loadingProgreso").style.display = "none";
+                document.getElementById("progresoChart").classList.remove("d-none");
+
                 const labels = data.map(d => d.nombre_proyecto);
                 const presupuestos = data.map(d => d.presupuesto_total);
                 const consumosEnergia = data.map(d => d.consumo_energia);
@@ -220,15 +278,52 @@ if (!isset($_SESSION['user_id'])) {
                         responsive: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                            display: true,
+                            position: 'top'
+                            },
+                            tooltip: {
+                            enabled: true,
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) label += ': ';
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toLocaleString();
+                                }
+                                return label;
+                                }
+                            }
                             }
                         },
+                        interaction: {
+                            mode: 'nearest',
+                            axis: 'x',
+                            intersect: false
+                        },
                         scales: {
+                            x: {
+                            title: {
+                                display: true,
+                                text: 'Nombre de proyecto'
+                            },
+                            ticks: {
+                                autoSkip: true,
+                                maxRotation: 45,
+                                minRotation: 0
+                            }
+                            },
                             y: {
-                                beginAtZero: true
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Valores'
+                            }
                             }
                         }
-                    }
+                        }
+
                 });
             })
             .catch(err => console.error('Error al cargar la comparación de proyectos:', err));
@@ -253,6 +348,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Llamada para obtener y mostrar los reportes recientes
     fetchReportesRecientes()
         .then(data => {
+            document.getElementById("loadingProgreso").style.display = "none";
+            document.getElementById("progresoChart").classList.remove("d-none");
+
             // Limpiar el contenido previo de la tabla
             reportesRecientesTable.innerHTML = '';
 
@@ -295,6 +393,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     fetchTendenciasHistoricas().then(data => {
+        document.getElementById("loadingProgreso").style.display = "none";
+        document.getElementById("progresoChart").classList.remove("d-none");
+
         const fechas = data.map(d => d.fecha_inicio);
         const consumosEnergia = data.map(d => d.consumo_energia);
         const consumosAgua = data.map(d => d.consumo_agua);
@@ -332,25 +433,52 @@ document.addEventListener('DOMContentLoaded', () => {
                 responsive: true,
                 plugins: {
                     legend: {
-                        position: 'top'
+                    display: true,
+                    position: 'top'
+                    },
+                    tooltip: {
+                    enabled: true,
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function(context) {
+                        let label = context.dataset.label || '';
+                        if (label) label += ': ';
+                        if (context.parsed.y !== null) {
+                            label += context.parsed.y.toLocaleString();
+                        }
+                        return label;
+                        }
                     }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
                 },
                 scales: {
                     x: {
-                        title: {
-                            display: true,
-                            text: 'Fechas'
-                        }
+                    title: {
+                        display: true,
+                        text: 'Fecha'
+                    },
+                    ticks: {
+                        autoSkip: true,
+                        maxRotation: 45,
+                        minRotation: 0
+                    }
                     },
                     y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Valores'
-                        }
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Valores'
+                    }
                     }
                 }
-            }
+                }
+
         });
     }).catch(err => console.error('Error al cargar las tendencias históricas:', err));
 });
@@ -385,6 +513,9 @@ document.getElementById('toggleTableButton').addEventListener('click', function 
     function cargarTabla() {
         fetchReportesRecientes()
             .then(data => {
+                document.getElementById("loadingProgreso").style.display = "none";
+                document.getElementById("progresoChart").classList.remove("d-none");
+
                 reportesRecientesTable.innerHTML = '';
 
                 if (data.length > 0) {

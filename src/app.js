@@ -115,7 +115,43 @@ $(document).ready(function(){
                 data: JSON.stringify({ id: id }),
                 success: function(response) {
                     console.log("Respuesta del servidor:", response);
-                    listarProyectos();
+
+                    if (typeof response === 'string') {
+                        response = JSON.parse(response);
+                    }
+
+                    console.log("response:", response);
+
+                    const mensajeDiv = $('#mensaje-proyecto'); // usa jQuery
+
+                    // Determina el color y contenido del mensaje
+                    const tipo = (response.status === 'success') ? 'success' : 'danger';
+                    const icono = (response.status === 'success') ? '✅' : '⚠️';
+
+                    console.log("Insertando mensaje en #mensaje-proyecto");
+                    console.log("Contenedor existe:", $('#mensaje-proyecto').length);
+
+                    mensajeDiv.html(`
+                        <div class="alert alert-${tipo} fade show" role="alert">
+                            <strong>${icono}</strong> ${response.message}
+                        </div>
+                    `)
+                        .hide()
+                        .fadeIn('fast');
+
+                    // Ejecutar listarProyectos solo después de mostrar el mensaje
+                    if (response.status === 'success') {
+                        setTimeout(() => {
+                            listarProyectos();
+                        }, 500); // pequeño delay para no sobreescribir
+                    }
+
+                    // Ocultar el mensaje después de 5 segundos
+                    setTimeout(() => {
+                        $('.alert').fadeOut(500, function () {
+                            mensajeDiv.html('');
+                        });
+                    }, 5000);
                 },
                 error: function(xhr, status, error) {
                     console.error('Error AJAX:', status, error);

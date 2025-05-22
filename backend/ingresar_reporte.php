@@ -75,37 +75,37 @@ $conexion->close();
             <?php if (in_array('agua', $objetivosSeleccionados)): ?>
                 <div class="mb-3">
                     <label for="waterUsage" class="form-label">Consumo Total de Agua (m³)</label>
-                    <input type="number" class="form-control" name="waterUsage" id="waterUsage" placeholder="Cantidad en m³" required>
+                    <input type="number" class="form-control" name="waterUsage" id="waterUsage" placeholder="Cantidad en m³" min="0" required>
                 </div>
                 <div class="mb-3">
                     <label for="waterCost" class="form-label">Costo Total del Agua ($ MXN)</label>
-                    <input type="number" class="form-control" name="waterCost" id="waterCost" placeholder="Costo en pesos MXN" required>
+                    <input type="number" class="form-control" name="waterCost" id="waterCost" placeholder="Costo en pesos MXN" min="0" required>
                 </div>
             <?php endif; ?>
 
             <?php if (in_array('energia', $objetivosSeleccionados)): ?>
                 <div class="mb-3">
                     <label for="energyUsage" class="form-label">Consumo Energético Total (kWh)</label>
-                    <input type="number" class="form-control" name="energyUsage" id="energyUsage" placeholder="Cantidad en kWh" required>
+                    <input type="number" class="form-control" name="energyUsage" id="energyUsage" placeholder="Cantidad en kWh" min="0" required>
                 </div>
                 <div class="mb-3">
                     <label for="energyCost" class="form-label">Costo Total de Energía ($ MXN)</label>
-                    <input type="number" class="form-control" name="energyCost" id="energyCost" placeholder="Costo en pesos mexicanos" required>
+                    <input type="number" class="form-control" name="energyCost" id="energyCost" placeholder="Costo en pesos mexicanos" min="0" required>
                 </div>
             <?php endif; ?>
 
             <?php if (in_array('operacion', $objetivosSeleccionados)): ?>
                 <div class="mb-3">
                     <label for="operationalExpenses" class="form-label">Gastos Operativos Totales ($ MXN)</label>
-                    <input type="number" class="form-control" name="operationalExpenses" id="operationalExpenses" placeholder="Costo en pesos MXN">
+                    <input type="number" class="form-control" name="operationalExpenses" id="operationalExpenses" placeholder="Costo en pesos MXN" min="0">
                 </div>
                 <div class="mb-3">
                     <label for="budget" class="form-label">Presupuesto Total ($ MXN)</label>
-                    <input type="number" class="form-control" name="budget" id="budget" placeholder="Presupuesto en pesos MXN" required>
+                    <input type="number" class="form-control" name="budget" id="budget" placeholder="Presupuesto en pesos MXN" min="0" required>
                 </div>
                 <div class="mb-3">
                     <label for="budgetVariance" class="form-label">Variación Presupuestaria ($ MXN)</label>
-                    <input type="number" class="form-control" name="budgetVariance" id="budgetVariance" placeholder="Variación en pesos MXN" required>
+                    <input type="number" class="form-control" name="budgetVariance" id="budgetVariance" placeholder="Variación en pesos MXN" min="0" required>
                 </div>
             <?php endif; ?>
 

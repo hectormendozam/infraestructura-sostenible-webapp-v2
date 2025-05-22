@@ -7,6 +7,9 @@ error_reporting(E_ALL);
 include 'config.php';
 // Iniciar la sesión
 session_start();
+$inputError = $_SESSION['form_error'] ?? '';
+$formData = $_SESSION['form_data'] ?? [];
+unset($_SESSION['form_error'], $_SESSION['form_data']);
 
 // Verificar si el usuario está autenticado
 if (!isset($_SESSION['user_id'])) {
@@ -68,7 +71,10 @@ $stmt->close();
             <div class="form-group">
                 <fieldset>
                     <label for="name" class="form-label">Nombre del Proyecto</label>
-                    <input class="form-control mb-3" type="text" id="name" name="name">
+                    <input class="form-control <?php if ($inputError) echo 'is-invalid'; ?> mb-1" type="text" id="name" name="name" value="<?= htmlspecialchars($formData['nombre'] ?? '') ?>">
+                    <?php if ($inputError): ?>
+                        <div class="invalid-feedback d-block"><?= $inputError ?></div>
+                    <?php endif; ?>
 
                     <label for="description" class="form-label">Descripción del Proyecto</label>
                     <textarea class="form-control mb-3" id="description" name="description"></textarea>

@@ -21,13 +21,23 @@ class Delete extends Database {
             // SANITIZAMOS EL ID PARA EVITAR INYECCIÓN SQL
             $id = $this->conexion->real_escape_string($id);
 
-            // SE REALIZA LA QUERY DE BÚSQUEDA Y AL MISMO TIEMPO SE VALIDA SI HUBO RESULTADOS
+            $sqlCheck = "SELECT COUNT(*) AS total FROM reportes WHERE proyecto_id = {$id}";
+            $resultCheck = $this->conexion->query($sqlCheck);
+            if ($resultCheck) {
+                $row = $resultCheck->fetch_assoc();
+                if ($row['total'] > 0) {
+                    $this->data['message'] = "No se puede eliminar el proyecto porque tiene reportes vinculados.";
+                    return json_encode($this->data);
+                }
+            }
+
+             // Si no hay reportes, proceder a marcar como eliminado
             $sql = "UPDATE proyectos SET eliminado = 1 WHERE id = {$id}";
             if ( $this->conexion->query($sql) ) {
                 $this->data['status'] =  "success";
-                $this->data['message'] =  "Proyecto eliminado";
+                $this->data['message'] =  "Proyecto eliminado correctamente.";
             } else {
-                $this->data['message'] = "ERROR: No se ejecuto $sql. " . mysqli_error($this->conexion);
+                $this->data['message'] = "ERROR: No se ejecutó $sql. " . mysqli_error($this->conexion);
             }
             $this->conexion->close();
         } 

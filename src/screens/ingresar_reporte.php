@@ -14,10 +14,33 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Verificar si hay objetivos en la sesión
 $objetivosSeleccionados = isset($_SESSION['objetivos']) ? $_SESSION['objetivos'] : [];
+
 if (empty($objetivosSeleccionados)) {
-    echo "No hay objetivos seleccionados. <a href='objectives.php'>Volver</a>";
+    ?>
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Advertencia</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            * {
+                font-family: "Noto Serif JP", serif;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container my-5 text-center">
+            <div class="alert alert-warning shadow-sm p-4 rounded mx-auto" style="max-width: 600px;">
+                <h4 class="fw-bold text-warning mb-3">⚠️ Atención</h4>
+                <p class="fw-bold mb-0">No hay <strong>objetivos seleccionados</strong> en tu sesión actual.</p>
+            </div>
+            <a href="objectives.php" class="btn btn-warning btn-lg mt-4 shadow-sm">Volver a seleccionar objetivos</a>
+        </div>
+    </body>
+    </html>
+    <?php
     exit;
 }
 
@@ -97,39 +120,40 @@ $stmt->close();
             <?php if (in_array('agua', $objetivosSeleccionados)): ?>
                 <div class="mb-3">
                     <label for="waterUsage" class="form-label">Consumo Total de Agua (m³)</label>
-                    <input type="number" class="form-control" name="waterUsage" id="waterUsage" placeholder="Cantidad en m³">
+                    <input type="number" class="form-control" name="waterUsage" id="waterUsage" min="0" placeholder="Cantidad en m³">
                 </div>
                 <div class="mb-3">
                     <label for="waterCost" class="form-label">Costo Total del Agua ($ MXN)</label>
-                    <input type="number" class="form-control" name="waterCost" id="waterCost" placeholder="Costo en pesos MXN">
+                    <input type="number" class="form-control" name="waterCost" id="waterCost" min="0" placeholder="Costo en pesos MXN">
                 </div>
             <?php endif; ?>
 
             <?php if (in_array('energia', $objetivosSeleccionados)): ?>
                 <div class="mb-3">
                     <label for="energyUsage" class="form-label">Consumo Energético Total (kWh)</label>
-                    <input type="number" class="form-control" name="energyUsage" id="energyUsage" placeholder="Cantidad en kWh">
+                    <input type="number" class="form-control" name="energyUsage" id="energyUsage" min="0" placeholder="Cantidad en kWh">
                 </div>
                 <div class="mb-3">
                     <label for="energyCost" class="form-label">Costo Total de Energía ($ MXN)</label>
-                    <input type="number" class="form-control" name="energyCost" id="energyCost" placeholder="Costo en pesos mexicanos">
+                    <input type="number" class="form-control" name="energyCost" id="energyCost" min="0" placeholder="Costo en pesos mexicanos">
                 </div>
             <?php endif; ?>
 
             <?php if (in_array('operacion', $objetivosSeleccionados)): ?>
                 <div class="mb-3">
                     <label for="operationalExpenses" class="form-label">Gastos Operativos Totales ($ MXN)</label>
-                    <input type="number" class="form-control" name="operationalExpenses" id="operationalExpenses" placeholder="Costo en pesos MXN">
+                    <input type="number" class="form-control" name="operationalExpenses" id="operationalExpenses" min="0" placeholder="Costo en pesos MXN">
                 </div>
                 <div class="mb-3">
                     <label for="budget" class="form-label">Presupuesto Total ($ MXN)</label>
-                    <input type="number" class="form-control" name="budget" id="budget" placeholder="Presupuesto en pesos MXN">
+                    <input type="number" class="form-control" name="budget" id="budget" min="0" placeholder="Presupuesto en pesos MXN">
                 </div>
                 <div class="mb-3">
                     <label for="budgetVariance" class="form-label">Variación Presupuestaria ($ MXN)</label>
-                    <input type="number" class="form-control" name="budgetVariance" id="budgetVariance" placeholder="Variación en pesos MXN">
+                    <input type="number" class="form-control" name="budgetVariance" id="budgetVariance" min="0" placeholder="Variación en pesos MXN">
                 </div>
             <?php endif; ?>
+
 
             <!-- Observaciones -->
             <div class="mb-3">
