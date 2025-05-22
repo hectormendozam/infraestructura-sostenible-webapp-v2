@@ -11,7 +11,7 @@ if (empty($objetivosSeleccionados)) {
 }
 
 // Conectar a la base de datos
-$conexion = new mysqli('localhost', 'root', '12345678', 'proyecto_db');
+$conexion = new mysqli('localhost', 'root', '12345678', 'infraestructura_test');
 if ($conexion->connect_error) {
     die('Error de conexión: ' . $conexion->connect_error);
 }

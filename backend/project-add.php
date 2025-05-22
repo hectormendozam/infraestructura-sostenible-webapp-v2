@@ -18,7 +18,7 @@
         exit();
     }
     
-        $proyectos = new Create('proyecto_db');
+        $proyectos = new Create('infraestructura_test');
         $proyectos->add($jsonOBJ);
         // Devolver la respuesta como JSON
         echo json_encode($proyectos->getData());

@@ -13,7 +13,7 @@
     // Verificar si se recibió el ID
     if (isset($data['id'])) {
         $id = $data['id']; // Asignar el valor de 'id' a la variable $id
-        $proyectos = new Delete('proyecto_db');
+        $proyectos = new Delete('infraestructura_test');
         $proyectos->delete($id);
         echo $proyectos->getData();
     } else {

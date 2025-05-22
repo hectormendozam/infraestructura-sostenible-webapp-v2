@@ -73,6 +73,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h3 class="text-center mb-4">Iniciar sesión</h3>
+                <?php if (isset($_GET['registro']) && $_GET['registro'] === 'exito'): ?>
+                    <div class="alert alert-success">Cuenta creada correctamente. Ya puedes iniciar sesión.</div>
+                <?php endif; ?>
+                
                 <?php if (!empty($error)): ?>
                     <div class="alert alert-danger"><?php echo $error; ?></div>
                 <?php endif; ?>

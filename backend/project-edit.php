@@ -5,7 +5,7 @@
     header('Content-Type: application/json');
 
 
-    $proyectos = new Update('proyecto_db');
+    $proyectos = new Update('infraestructura_test');
     $entrada = file_get_contents('php://input');
     $jsonOBJ = json_decode($entrada);
 
