@@ -7,7 +7,7 @@ module.exports = defineConfig({
       require('@shelex/cypress-allure-plugin/writer')(on, config);
       return config;
     },
-    baseUrl: 'http://http://localhost/infraestructura-corregida/src/screens/index.php' // ajusta si es necesario
+    baseUrl: 'http://http://localhost/infraestructura-corregida/src/screens/login.php' // ajusta si es necesario
   },
   env: {
     allure: true,

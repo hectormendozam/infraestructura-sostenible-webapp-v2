@@ -1,4 +1,11 @@
 {
+  "name": "hecto/infraestructura-corregida",
+  "description": "Webapp en PHP con pruebas integradas",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.0",
+    "ext-mysqli": "*"
+},
     "require-dev": {
         "codeception/codeception": "^5.3",
         "codeception/module-phpbrowser": "*",
