@@ -1,15 +1,21 @@
 const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
-  reporter: '@shelex/cypress-allure-plugin',
+  projectId: "hcytu5",
+  //reporter: '@shelex/cypress-allure-plugin',
+  reporterOptions: {
+    outputDir: 'allure-results',
+    overwrite: false,
+    clean: true
+  },
   e2e: {
     setupNodeEvents(on, config) {
       require('@shelex/cypress-allure-plugin/writer')(on, config);
       return config;
     },
-    baseUrl: 'http://http://localhost/infraestructura-corregida/src/screens/login.php' // ajusta si es necesario
+    baseUrl: 'http://localhost/infraestructura-corregida/src' // ajusta según tu entorno
   },
   env: {
-    allure: true,
+    allure: true
   }
 });
